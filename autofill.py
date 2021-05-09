@@ -34,11 +34,16 @@ def tokenizeText(text):
 def generateNGrams(words_list, n, count = 0):
     for num in range(0, len(words_list)):
         sentence = ' '.join(words_list[num:num + n])
-        return sentence
+        if sentence not in ngrams_list.keys():
+            ngrams_list[sentence] = 1
+        else:
+            ngrams_list[sentence] += 1
+        count += 1
+        probabilities[sentence] = ngrams_list[sentence] / count
 
 dataset = prepareData()
 words = tokenizeText(dataset)
-sentence = generateNGrams(words, ngramsNum)
+generateNGrams(words, ngramsNum)
 
 for seq in probabilities:
     print(seq, probabilities[seq])
