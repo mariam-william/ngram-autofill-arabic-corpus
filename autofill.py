@@ -24,7 +24,6 @@ def tokenizeText(text):
     text = text.lower()
     # tokenizing text to work on arabic and english words and numbers
     text = re.sub('[^\sa-zA-Z0-9ء-ي]', '', text)
-    print(text)
     return text.split()
 
 
@@ -39,10 +38,38 @@ def generateNGrams(words_list, n, count = 0):
         probabilities[sentence] = ngrams_list[sentence] / count
 
 
+def splitSequence(seq):
+    sequence = seq.split(" ")
+    return sequence
+
+
+def getPredictions(sequence, nPredictions):
+    predicted = []
+    inputSequence = splitSequence(sequence)
+    for sentence in probabilities.keys():
+        if sequence in sentence:
+            outputSequence = splitSequence(sentence)
+            if outputSequence[0] != inputSequence[0] or outputSequence[1] != inputSequence[1]:
+                continue
+            predicted.append((sentence, probabilities[sentence]))
+
+    predicted.sort(key=lambda x: x[1], reverse=True)
+
+    if len(predicted) < nPredictions:
+        nPredictions = len(predicted)
+    print(len(predicted))
+    for i in range(0, nPredictions):
+        outputSequence = predicted[i][0].split(" ")
+        print(outputSequence[2])
+
+
 dataset = prepareData()
 words = tokenizeText(dataset)
-generateNGrams(words, ngramsNum)
+generateNGrams(words, 3)
 
-for seq in probabilities:
-    print(seq, probabilities[seq])
+# for seq in probabilities:
+#    print(seq, probabilities[seq])
+
+seq = input("Enter two words: ")
+getPredictions(seq.lower(), nPredictions)
 
