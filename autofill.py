@@ -3,11 +3,13 @@
 @authors: Alaa Farouk - Mariam Makram
 """
 
+import re
+
 ngramsNum = 3
 ngrams_list = {}
 probabilities = {}
 count = 0
-nPredictions = 3
+nPredictions = 5
 
 def prepareData():
     file = open(
@@ -20,14 +22,9 @@ def prepareData():
 # preparing data for generating ngrams
 def tokenizeText(text):
     text = text.lower()
-    text = text.replace(',', ' ')
-    text = text.replace('/', ' ')
-    text = text.replace('(', ' ')
-    text = text.replace(')', ' ')
-    text = text.replace('.', ' ')
-    text = text.replace('،', '')
-    text = text.replace('\'', '')
-    text = text.replace('\n', ' ')
+    # tokenizing text to work on arabic and english words and numbers
+    text = re.sub('[^\sa-zA-Z0-9ء-ي]', '', text)
+    print(text)
     return text.split()
 
 
@@ -40,6 +37,7 @@ def generateNGrams(words_list, n, count = 0):
             ngrams_list[sentence] += 1
         count += 1
         probabilities[sentence] = ngrams_list[sentence] / count
+
 
 dataset = prepareData()
 words = tokenizeText(dataset)
