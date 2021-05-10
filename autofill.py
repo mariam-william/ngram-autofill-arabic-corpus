@@ -1,31 +1,21 @@
 # -*- coding: utf-8 -*-
 """
+
 @authors: Alaa Farouk - Mariam Makram
 """
 
 import re
-<<<<<<< Updated upstream
-
-=======
 from tkinter import *
 import tkinter as tk
->>>>>>> Stashed changes
 ngramsNum = 3
 ngrams_list = {}
 probabilities = {}
 count = 0
 nPredictions = 5
 options=[]
-root=tk.Tk()
-
-root.title("AutoFill Window")
-
-# setting the windows size
-root.geometry("600x400")
-
 def prepareData():
     file = open(
-        "D:\\College\\Level_4\\Second_Semester\\Natural Language Processing\\Assignments\\Assignment_1\\NGram_Autofill\\ds.txt",
+        "ds.txt",
         "r", encoding="UTF-8")
     dataset = file.read()
     file.close()
@@ -72,7 +62,6 @@ def getPredictions(sequence, numPredictions):
 
     predicted.sort(key=lambda x: x[1], reverse=True)
 
-<<<<<<< Updated upstream
     if len(predicted) == 0:
         print("No predicted words")
     else:
@@ -81,31 +70,21 @@ def getPredictions(sequence, numPredictions):
 
         for i in range(0, numPredictions):
             outputSequence = predicted[i][0].split(" ")
-            print(outputSequence[len(inputSequence)])
-
-=======
-    if len(predicted) < nPredictions:
-        nPredictions = len(predicted)
-   # print(len(predicted))
-    for i in range(0, nPredictions):
-        outputSequence = predicted[i][0].split(" ")
-      #  print(outputSequence[2])
-        options.append(outputSequence[2])
+          #  print(outputSequence[len(inputSequence)])
+            options.append(outputSequence[len(inputSequence)])
     return options 
->>>>>>> Stashed changes
 
 dataset = prepareData()
 words = tokenizeText(dataset)
 
-<<<<<<< Updated upstream
-# for seq in probabilities:
-#    print(seq, probabilities[seq])
-
-seq = input("Enter search words: ")
-generateNGrams(words, len(splitSequence(seq)) + 1, count)
-getPredictions(seq.lower(), nPredictions)
-=======
-
+root=tk.Tk()
+# setting the windows size
+root.geometry("600x400")
+root.title("AutoFill ")
+# declaring string variable for storing input
+inputuser_var=tk.StringVar()
+ 
+# defining a function that will get the name and password and print them on the screen
 outputoptions=[]
 # declaring string variable for storing input
 inputuser_var=tk.StringVar()
@@ -114,6 +93,7 @@ inputuser_var=tk.StringVar()
 def Searchbutton():
     inputuser=inputuser_var.get()
    # print("Two Words: " + inputuser.lower())
+    generateNGrams(words, len(splitSequence(inputuser)) + 1, count)
     outputoptions=getPredictions(inputuser.lower(), nPredictions)
     mb=  Menubutton ( root, text="Auto fill for the words", relief=RAISED )
     mb.grid(row=3,column=1)
@@ -123,6 +103,7 @@ def Searchbutton():
     for i in range(0, len(outputoptions)):
          mb.menu.add_checkbutton ( label=inputuser+" " + str(outputoptions[i]), variable=mayoVar )
     
+   
      
 # creating a label for input using widget Label
 words_label = tk.Label(root, text = 'Enter Two Words : ', font=('calibre',10, 'bold'))
@@ -130,6 +111,7 @@ words_label = tk.Label(root, text = 'Enter Two Words : ', font=('calibre',10, 'b
 # creating a entry for input words using widget Entry
 words_entry = tk.Entry(root,textvariable = inputuser_var, font=('calibre',10,'normal'))
    
+
 # creating a button using the widget Button that will call the search function
 s_btn=tk.Button(root,text = 'Submit', command = Searchbutton)
 
@@ -137,7 +119,6 @@ s_btn=tk.Button(root,text = 'Submit', command = Searchbutton)
 words_label.grid(row=0,column=0)
 words_entry.grid(row=0,column=1)
 s_btn.grid(row=2,column=1)
-
+# performing an infinite loop for the window to display
 root.mainloop()
->>>>>>> Stashed changes
 
