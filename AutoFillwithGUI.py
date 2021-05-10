@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """
+
 @authors: Alaa Farouk - Mariam Makram
 """
 
@@ -12,9 +13,10 @@ probabilities = {}
 count = 0
 nPredictions = 5
 options=[]
-
 def prepareData():
-    file = open("ds.txt","r", encoding="UTF-8")
+    file = open(
+        "ds.txt",
+        "r", encoding="UTF-8")
     dataset = file.read()
     file.close()
     return dataset
@@ -27,15 +29,15 @@ def tokenizeText(text):
     return text.split()
 
 
-def generateNGrams(words_list, n, count = 0):
+def generateNGrams(words_list, n, counter=0):
     for num in range(0, len(words_list)):
         sentence = ' '.join(words_list[num:num + n])
         if sentence not in ngrams_list.keys():
             ngrams_list[sentence] = 1
         else:
             ngrams_list[sentence] += 1
-        count += 1
-        probabilities[sentence] = ngrams_list[sentence] / count
+        counter += 1
+        probabilities[sentence] = ngrams_list[sentence] / counter
 
 
 def splitSequence(seq):
@@ -43,52 +45,45 @@ def splitSequence(seq):
     return sequence
 
 
-def getPredictions(sequence, nPredictions):
+def getPredictions(sequence, numPredictions):
     predicted = []
     inputSequence = splitSequence(sequence)
     for sentence in probabilities.keys():
         if sequence in sentence:
             outputSequence = splitSequence(sentence)
-            if outputSequence[0] != inputSequence[0] or outputSequence[1] != inputSequence[1]:
+            cont = False
+            for i in range(0, len(inputSequence)):
+                if outputSequence[i] != inputSequence[i]:
+                    cont = True
+                    break
+            if cont:
                 continue
             predicted.append((sentence, probabilities[sentence]))
 
     predicted.sort(key=lambda x: x[1], reverse=True)
 
-    if len(predicted) < nPredictions:
-        nPredictions = len(predicted)
-    print(len(predicted))
-    for i in range(0, nPredictions):
-        outputSequence = predicted[i][0].split(" ")
-        print(outputSequence[2])
-        options.append(outputSequence[2])
-    return options 
-        
+    if len(predicted) == 0:
+        print("No predicted words")
+    else:
+        if len(predicted) < numPredictions:
+            numPredictions = len(predicted)
 
+        for i in range(0, numPredictions):
+            outputSequence = predicted[i][0].split(" ")
+          #  print(outputSequence[len(inputSequence)])
+            options.append(outputSequence[len(inputSequence)])
+    return options 
 
 dataset = prepareData()
 words = tokenizeText(dataset)
-generateNGrams(words, 3)
 
-# for seq in probabilities:
-#    print(seq, probabilities[seq])
-'''
-seq = input("Enter two words: ")
-getPredictions(seq.lower(), nPredictions)
-'''
-
-
-  
 root=tk.Tk()
- 
 # setting the windows size
 root.geometry("600x400")
-  
-# declaring string variable
-# for storing input
+root.title("AutoFill ")
+# declaring string variable for storing input
 inputuser_var=tk.StringVar()
  
-  
 # defining a function that will get the name and password and print them on the screen
 outputoptions=[]
 # declaring string variable for storing input
@@ -98,6 +93,7 @@ inputuser_var=tk.StringVar()
 def Searchbutton():
     inputuser=inputuser_var.get()
    # print("Two Words: " + inputuser.lower())
+    generateNGrams(words, len(splitSequence(inputuser)) + 1, count)
     outputoptions=getPredictions(inputuser.lower(), nPredictions)
     mb=  Menubutton ( root, text="Auto fill for the words", relief=RAISED )
     mb.grid(row=3,column=1)
