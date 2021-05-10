@@ -68,14 +68,11 @@ def getPredictions(sequence, numPredictions):
 
         for i in range(0, numPredictions):
             outputSequence = predicted[i][0].split(" ")
-            print(outputSequence[len(inputSequence)])
+            print(sequence + " " + outputSequence[len(inputSequence)])
 
 
 dataset = prepareData()
 words = tokenizeText(dataset)
-
-# for seq in probabilities:
-#    print(seq, probabilities[seq])
 
 seq = input("Enter search words: ")
 generateNGrams(words, len(splitSequence(seq)) + 1, count)
