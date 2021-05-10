@@ -4,12 +4,24 @@
 """
 
 import re
+<<<<<<< Updated upstream
 
+=======
+from tkinter import *
+import tkinter as tk
+>>>>>>> Stashed changes
 ngramsNum = 3
 ngrams_list = {}
 probabilities = {}
 count = 0
 nPredictions = 5
+options=[]
+root=tk.Tk()
+
+root.title("AutoFill Window")
+
+# setting the windows size
+root.geometry("600x400")
 
 def prepareData():
     file = open(
@@ -60,6 +72,7 @@ def getPredictions(sequence, numPredictions):
 
     predicted.sort(key=lambda x: x[1], reverse=True)
 
+<<<<<<< Updated upstream
     if len(predicted) == 0:
         print("No predicted words")
     else:
@@ -70,14 +83,61 @@ def getPredictions(sequence, numPredictions):
             outputSequence = predicted[i][0].split(" ")
             print(outputSequence[len(inputSequence)])
 
+=======
+    if len(predicted) < nPredictions:
+        nPredictions = len(predicted)
+   # print(len(predicted))
+    for i in range(0, nPredictions):
+        outputSequence = predicted[i][0].split(" ")
+      #  print(outputSequence[2])
+        options.append(outputSequence[2])
+    return options 
+>>>>>>> Stashed changes
 
 dataset = prepareData()
 words = tokenizeText(dataset)
 
+<<<<<<< Updated upstream
 # for seq in probabilities:
 #    print(seq, probabilities[seq])
 
 seq = input("Enter search words: ")
 generateNGrams(words, len(splitSequence(seq)) + 1, count)
 getPredictions(seq.lower(), nPredictions)
+=======
+
+outputoptions=[]
+# declaring string variable for storing input
+inputuser_var=tk.StringVar()
+
+# defining a function that will get the words and print them on the screen
+def Searchbutton():
+    inputuser=inputuser_var.get()
+   # print("Two Words: " + inputuser.lower())
+    outputoptions=getPredictions(inputuser.lower(), nPredictions)
+    mb=  Menubutton ( root, text="Auto fill for the words", relief=RAISED )
+    mb.grid(row=3,column=1)
+    mb.menu =  Menu (mb, tearoff = 0 )
+    mb["menu"] =  mb.menu
+    mayoVar = IntVar()    
+    for i in range(0, len(outputoptions)):
+         mb.menu.add_checkbutton ( label=inputuser+" " + str(outputoptions[i]), variable=mayoVar )
+    
+     
+# creating a label for input using widget Label
+words_label = tk.Label(root, text = 'Enter Two Words : ', font=('calibre',10, 'bold'))
+  
+# creating a entry for input words using widget Entry
+words_entry = tk.Entry(root,textvariable = inputuser_var, font=('calibre',10,'normal'))
+   
+# creating a button using the widget Button that will call the search function
+s_btn=tk.Button(root,text = 'Submit', command = Searchbutton)
+
+#placing the label and entry in the required position using grid method
+words_label.grid(row=0,column=0)
+words_entry.grid(row=0,column=1)
+s_btn.grid(row=2,column=1)
+
+root.mainloop()
+>>>>>>> Stashed changes
 
