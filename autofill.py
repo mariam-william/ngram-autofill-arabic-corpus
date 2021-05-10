@@ -27,15 +27,15 @@ def tokenizeText(text):
     return text.split()
 
 
-def generateNGrams(words_list, n, count = 0):
+def generateNGrams(words_list, n, counter=0):
     for num in range(0, len(words_list)):
         sentence = ' '.join(words_list[num:num + n])
         if sentence not in ngrams_list.keys():
             ngrams_list[sentence] = 1
         else:
             ngrams_list[sentence] += 1
-        count += 1
-        probabilities[sentence] = ngrams_list[sentence] / count
+        counter += 1
+        probabilities[sentence] = ngrams_list[sentence] / counter
 
 
 def splitSequence(seq):
@@ -43,33 +43,41 @@ def splitSequence(seq):
     return sequence
 
 
-def getPredictions(sequence, nPredictions):
+def getPredictions(sequence, numPredictions):
     predicted = []
     inputSequence = splitSequence(sequence)
     for sentence in probabilities.keys():
         if sequence in sentence:
             outputSequence = splitSequence(sentence)
-            if outputSequence[0] != inputSequence[0] or outputSequence[1] != inputSequence[1]:
+            cont = False
+            for i in range(0, len(inputSequence)):
+                if outputSequence[i] != inputSequence[i]:
+                    cont = True
+                    break
+            if cont:
                 continue
             predicted.append((sentence, probabilities[sentence]))
 
     predicted.sort(key=lambda x: x[1], reverse=True)
 
-    if len(predicted) < nPredictions:
-        nPredictions = len(predicted)
-    print(len(predicted))
-    for i in range(0, nPredictions):
-        outputSequence = predicted[i][0].split(" ")
-        print(outputSequence[2])
+    if len(predicted) == 0:
+        print("No predicted words")
+    else:
+        if len(predicted) < numPredictions:
+            numPredictions = len(predicted)
+
+        for i in range(0, numPredictions):
+            outputSequence = predicted[i][0].split(" ")
+            print(outputSequence[len(inputSequence)])
 
 
 dataset = prepareData()
 words = tokenizeText(dataset)
-generateNGrams(words, 3)
 
 # for seq in probabilities:
 #    print(seq, probabilities[seq])
 
-seq = input("Enter two words: ")
+seq = input("Enter search words: ")
+generateNGrams(words, len(splitSequence(seq)) + 1, count)
 getPredictions(seq.lower(), nPredictions)
 
