@@ -76,7 +76,6 @@ def getPredictions(sequence):
     else:
         if len(predicted) < nPredictions:
             nPred = len(predicted)
-
         for i in range(0, nPred):
             outputSequence = predicted[i][0].split(" ")
             options.append(outputSequence[len(inputSequence)])
@@ -86,40 +85,46 @@ def getPredictions(sequence):
 def popup():
     messagebox.showinfo("Autofill Alert", "No predicted words")
 
+
+def showChoice():
+    userInput_var.set(str(choiceVar.get()))
+
 # defining a function that will get the words and print them on the screen
 def searchToken():
     userInput = userInput_var.get()
     generateNGrams(words, len(splitSequence(userInput)) + 1, count)
     output_options, noPredictions, nPred = getPredictions(userInput.lower())
-    mb = Menubutton(root, text="Auto fill for the words", relief=RAISED)
+    mb = Menubutton(root, text="Auto fill for the words", relief=RAISED, font=('AR CENA', 14, 'bold'))
     mb.grid(row=3, column=1)
-    mb.menu = Menu(mb, tearoff=0)
+    mb.menu = Menu(mb, tearoff=0, font=12)
     mb["menu"] = mb.menu
-    mayoVar = IntVar()
+    mb.menu.delete(0, nPred)
     if noPredictions:
         popup()
     else:
         for i in range(0, nPred):
-            mb.menu.add_checkbutton(label=userInput + " " + str(output_options[i]))
-
+            mb.menu.add_radiobutton(label=userInput + " " + str(output_options[i]),
+                                    variable=choiceVar, command=showChoice)
+    words_entry.delete(0, 'end')
+    ngrams_list.clear()
+    probabilities.clear()
+    options.clear()
 
 dataset = prepareData()
 words = tokenizeText(dataset)
 
 root = tk.Tk()
-root.geometry("400x400")
+root.geometry("600x400")
 root.title("AutoFill Arabic Corpus n-gram")
 
 output_options = []
 userInput_var = tk.StringVar()
-
+choiceVar = tk.StringVar()
 
 
 words_label = tk.Label(root, text=('Enter search words: '), fg=('indigo'), font=('AR CENA', 14, 'bold'))
-
-words_entry = tk.Entry(root, textvariable=userInput_var, font=('AR CENA', 10, 'normal'))
-
-searchButton = tk.Button(root, text='Submit', command=searchToken)
+words_entry = tk.Entry(root, textvariable=userInput_var, font=('AR CENA', 20, 'normal'), width=30)
+searchButton = tk.Button(root, text='Submit', command=searchToken, font=('AR CENA', 12, 'bold'))
 
 # placing the label and entry in the required position using grid method
 words_label.grid(row=0, column=0)

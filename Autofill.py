@@ -16,7 +16,7 @@ options = []
 
 def prepareData():
     file = open(
-        "ds.txt",
+        "dataset.txt",
         "r", encoding="UTF-8")
     dataset = file.read()
     file.close()
